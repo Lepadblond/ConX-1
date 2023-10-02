@@ -1,71 +1,92 @@
 import re
-
 from flask import redirect, render_template, request, Blueprint, session
 import hashlib
+import app  # Importez le module app pour accéder à l'instance mongo
 
 bp_compte = Blueprint("compte", __name__)
 
+# Expression régulière pour valider les adresses e-mail
 regex_courriel = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 
 
+# Fonction pour hacher le mot de passe avec SHA-512
 def hacher_mot_de_passe(mdp):
-    """Crypte le mot de passe"""
     return hashlib.sha512(mdp.encode()).hexdigest()
 
 
+# Route pour l'authentification
 @bp_compte.route("/authentifier", methods=["GET", "POST"])
 def connection():
-    """permet de se connecter"""
-    # GET
     if request.method == "GET":
+        # Affiche la page de formulaire de connexion lors de la requête GET
         return render_template("compte/authentification.jinja")
-    # POST
-    mail = request.form.get("mail", default="")
-    mdp = request.form.get("motdepasse", default="")
-    return render_template("compte/authentification.jinja")
+    elif request.method == "POST":
+        # Traite les données du formulaire de connexion lors de la requête POST
+        mail = request.form.get("mail", default="")
+        mdp = request.form.get("motdepasse", default="")
+        # ... Ajoutez ici la logique de connexion à la base de données
+        # ... Créez une session si l'authentification est réussie
+        return render_template("compte/authentification.jinja")
 
-    # ici on va mettre  la connection a la bd et le tralala
 
-
+# Fonction pour créer une session utilisateur
 def creer_session(identifiant):
-    """Crée une session"""
+    user = app.mongo.Users.find_one({"id_utilisateur": identifiant})
+    if not user:
+        return redirect("/authentifier", code=303)  # Redirige vers la page de connexion en cas d'échec
+    else:
+        session.permanent = True
+        session["user"] = user
+    return redirect("/", code=303)  # Redirige vers la page d'accueil en cas de succès
 
-    return redirect("/", code=303)
 
-
+# Route pour la déconnexion
 @bp_compte.route("/deconnecter")
 def deconnection():
-    return redirect("/", code=303)
+    # ... Ajoutez ici la logique de déconnexion et de suppression de la session
+    return redirect("/", code=303)  # Redirige vers la page d'accueil après la déconnexion
 
 
+# Route pour l'inscription
 @bp_compte.route('/inscription', methods=['GET', 'POST'])
 def inscription():
+    """Inscription d'un utilisateur"""
     if request.method == 'GET':
+        # Affiche la page de formulaire d'inscription lors de la requête GET
         return render_template('compte/inscription.jinja', message={})
-    else:
+    elif request.method == 'POST':
+        # Traite les données du formulaire d'inscription lors de la requête POST
         nom = request.form.get('nom')
         prenom = request.form.get('prenom')
         mail = request.form.get('mail')
         mdp = request.form.get('mdp')
         mdp2 = request.form.get('mdp2')
+
         message = {}
-        if not nom or not mail or not mdp or not mdp2 or not prenom:
-            message['vide'] = 'Veuillez remplir tous les champs'
-        if mdp != mdp2:
-            message['mdp'] = 'Les mots de passe ne correspondent pas'
-        if not re.match(regex_courriel, mail):
-            message['mail'] = 'Adresse mail invalide'
+
+        # Validation des données du formulaire (à décommenter et à compléter)
+        # if not nom or not mail or not mdp or not mdp2 or not prenom:
+        #     message['vide'] = 'Veuillez remplir tous les champs'
+        # if mdp != mdp2:
+        #     message['mdp'] = 'Les mots de passe ne correspondent pas'
+        # if not re.match(regex_courriel, mail):
+        #     message['mail'] = 'Adresse mail invalide'
 
         if message != {}:
+            # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
             return render_template('compte/inscription.jinja', message=message)
         else:
-            mdp = hacher_mot_de_passe(mdp)
-            # with bd.creer_connexion() as conn:
-            #     if bd.email_exists(conn, mail):
-            #         message['mail'] = 'Adresse mail déjà utilisée'
-            #         return render_template('inscription.html', message=message)
-            #     else:
-            #         bd.creer_compte(conn, nom, mail, mdp)
-            #         id_user = bd.get_id(conn, mdp, mail)
-            #       creer_session(id_user["id_utilisateur"])
-        return redirect('/compte/authentifier', code=303)
+            # Hash du mot de passe (à décommenter)
+            # mdp = hacher_mot_de_passe(mdp)
+
+            # Insertion de l'utilisateur dans la base de données
+            app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
+
+            # Récupération de l'ID de l'utilisateur nouvellement inscrit
+            id_user = app.mongo.Users.find_one({"email": mail})
+
+            # Création d'une session pour l'utilisateur inscrit
+            creer_session(id_user["id_utilisateur"])
+
+            # Redirige vers la page d'accueil après l'inscription
+            return redirect('/', code=303)
