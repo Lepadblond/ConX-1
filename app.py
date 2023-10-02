@@ -15,4 +15,9 @@ app.secret_key = "e21f73185e51e634aa9ef799c70878d366a55b7fd626981f271b66b10ac65c
 
 @app.route("/")
 def index():
-    return render_template("base.jinja")
+    """Afficher la page index"""
+
+    return render_template("index.jinja")
+
+
+
