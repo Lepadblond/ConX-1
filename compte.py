@@ -24,7 +24,9 @@ def connection():
 
 
 def creer_session(identifiant):
-    # cree la session
+# cree la session
+    return redirect("/", code=303)
+
 
 @bp_compte.route("/deconnecter")
 def deconnection():
