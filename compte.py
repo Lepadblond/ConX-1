@@ -1,6 +1,6 @@
 import re
 from flask import redirect, render_template, request, Blueprint, session, abort
-import hashlib , logging
+import hashlib, logging
 import app
 
 bp_compte = Blueprint("compte", __name__)
@@ -25,16 +25,16 @@ def connection():
         mail = request.form.get("mail", default="")
         mdp = request.form.get("mdp", default="")
 
-        user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
-        logging.info(user)
-        creer_session(user["email"])
+        user = app.mongo.db.users.find({"email": mail}, {"password": mdp})
+        if user is not None:
+            creer_session(user["_id"])
 
         return render_template("/")
 
 
 # Fonction pour créer une session utilisateur
-def creer_session(email):
-    user = app.mongo.db.users.find_one({"email": email})
+def creer_session(identifiant):
+    user = app.mongo.db.users.find({"_id": identifiant})
     if not user:
         return redirect("/authentifier", code=303)  # Redirige vers la page de connexion en cas d'échec
     else:
@@ -88,10 +88,10 @@ def inscription():
             app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
 
             # Récupération de l'ID de l'utilisateur nouvellement inscrit
-            #id_user = app.mongo.db.users.find_one({"email": mail})
+            # id_user = app.mongo.db.users.find_one({"email": mail})
 
             # Création d'une session pour l'utilisateur inscrit
-           # creer_session(id_user["_id"])
+            # creer_session(id_user["_id"])
 
             # Redirige vers la page d'accueil après l'inscription
             return redirect('/', code=303)
