@@ -1,0 +1,32 @@
+{% extends "base.jinja" %}
+{% block contenu %}
+    <form>
+  <!-- Email input -->
+  <div class="form-outline mb-4">
+    <input type="email" id="mail" class="form-control" />
+    <label class="form-label" for="form2Example1">Adresse courriel</label>
+  </div>
+
+  <!-- Password input -->
+  <div class="form-outline mb-4">
+    <input type="password" id="mdp" class="form-control" />
+    <label class="form-label" for="form2Example2">Mot de passe</label>
+  </div>
+
+
+
+
+
+
+  <!-- Submit button -->
+  <button type="button" class="btn btn-primary btn-block mb-4">Soumettre</button>
+
+
+  <div class="text-center">
+    <p>Pas de compte ? <a href="/compte/inscription">Inscription</a></p>
+
+  </div>
+</form>
+
+{% endblock %}
+```

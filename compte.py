@@ -1,7 +1,7 @@
 import re
-from flask import redirect, render_template, request, Blueprint, session
+from flask import redirect, render_template, request, Blueprint, session, abort
 import hashlib
-import app  # Importez le module app pour accéder à l'instance mongo
+import app
 
 bp_compte = Blueprint("compte", __name__)
 
@@ -19,19 +19,26 @@ def hacher_mot_de_passe(mdp):
 def connection():
     if request.method == "GET":
         # Affiche la page de formulaire de connexion lors de la requête GET
-        return render_template("compte/authentification.jinja")
+        return render_template("compte/login.jinja")
     elif request.method == "POST":
         # Traite les données du formulaire de connexion lors de la requête POST
         mail = request.form.get("mail", default="")
         mdp = request.form.get("motdepasse", default="")
-        # ... Ajoutez ici la logique de connexion à la base de données
-        # ... Créez une session si l'authentification est réussie
-        return render_template("compte/authentification.jinja")
+
+        user = app.mongo.Users.find_one({"email": mail}, {"password": mdp})\
+
+
+        if not user:
+            abort(401)
+
+        creer_session(user["id"])
+
+        return render_template("/")
 
 
 # Fonction pour créer une session utilisateur
 def creer_session(identifiant):
-    user = app.mongo.Users.find_one({"id_utilisateur": identifiant})
+    user = app.mongo.Users.find_one({"_id": identifiant})
     if not user:
         return redirect("/authentifier", code=303)  # Redirige vers la page de connexion en cas d'échec
     else:
@@ -65,12 +72,12 @@ def inscription():
         message = {}
 
         # Validation des données du formulaire (à décommenter et à compléter)
-        # if not nom or not mail or not mdp or not mdp2 or not prenom:
-        #     message['vide'] = 'Veuillez remplir tous les champs'
-        # if mdp != mdp2:
-        #     message['mdp'] = 'Les mots de passe ne correspondent pas'
-        # if not re.match(regex_courriel, mail):
-        #     message['mail'] = 'Adresse mail invalide'
+        if not nom or not mail or not mdp or not mdp2 or not prenom:
+            message['vide'] = 'Veuillez remplir tous les champs'
+        if mdp != mdp2:
+            message['mdp'] = 'Les mots de passe ne correspondent pas'
+        if not re.match(regex_courriel, mail):
+            message['mail'] = 'Adresse mail invalide'
 
         if message != {}:
             # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
@@ -86,7 +93,7 @@ def inscription():
             id_user = app.mongo.Users.find_one({"email": mail})
 
             # Création d'une session pour l'utilisateur inscrit
-            creer_session(id_user["id_utilisateur"])
+            creer_session(id_user["id"])
 
             # Redirige vers la page d'accueil après l'inscription
             return redirect('/', code=303)
