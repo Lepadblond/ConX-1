@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 {% block contenu %}
-    <form>
+    <form  method="post" action="/compte/authentifier" novalidate >
   <!-- Email input -->
   <div class="form-outline mb-4">
     <input type="email" id="mail" class="form-control" />
@@ -19,7 +19,8 @@
 
 
   <!-- Submit button -->
-  <button type="button" class="btn btn-primary btn-block mb-4">Soumettre</button>
+  <input class="bouton-submit" type="submit" value="Soumettree">
+
 
 
   <div class="text-center">
