@@ -1,0 +1,11 @@
+@font-face {
+        font-family: SpaceGrotesk; src: url("/static/fonts/SpaceGrotesk-Bold.otf") format('opentype');
+}
+
+*{
+    font-family: SpaceGrotesk;
+}
+
+.logo{
+    font-size: 2rem;
+}
