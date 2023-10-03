@@ -1,0 +1,27 @@
+{% extends "base.jinja" %}
+{% block contenu %}
+    <form  method="post" action="/compte/authentifier" novalidate >
+  <!-- Email input -->
+  <div class="form-outline mb-4">
+    <input type="email" id="mail" class="form-control" />
+    <label class="form-label" for="form2Example1">Adresse courriel</label>
+  </div>
+
+  <!-- Password input -->
+  <div class="form-outline mb-4">
+    <input type="password" id="mdp" class="form-control" />
+    <label class="form-label" for="form2Example2">Mot de passe</label>
+  </div>
+
+  <input class="bouton-submit" type="submit" value="Soumettre">
+
+
+
+  <div class="text-center">
+    <p>Pas de compte ? <a href="/compte/inscription">Inscription</a></p>
+
+  </div>
+</form>
+
+{% endblock %}
+```

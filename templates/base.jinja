@@ -4,9 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="https://www.cegepgarneau.ca/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
     <title>ConX</title>
+       {% block script %}
+    {% endblock %}
 </head>
 <body>
-    
+    <nav class="nav navbar navbar-dark">
+        <h1 class="nav-item text-decoration-none"><a href="/">ConX</a></h1>
+
+    {% if not session.user %}
+        <a href="/compte/authentifier">Se Connecter</a>
+        <a href="/compte/inscription">Créer un compte</a>
+    {% else %}
+
+        <a href="/compte/deconnecter">Se Déconnecter</a>
+    {% endif %}
+    </nav>
+    {% block contenu %}
+    {% endblock %}
 </body>
+<footer id="pied"> Frédéric Dignard et David Girard @Copyright 2023</footer>
 </html>

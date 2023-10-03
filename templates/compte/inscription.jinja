@@ -1,0 +1,40 @@
+{% extends "base.jinja" %}
+{% block contenu %}
+
+    <form class="formsAuthentification" method="post" action="/compte/inscription" novalidate>
+    <div>
+        <label for="nom">Votre nom :</label>
+        <input name="nom" id="nom" type="text" content="{{ nom }}">
+        {% if message.vide %}<span>Votre nom ne peux pas être vide</span>{% endif %}
+
+    </div>
+    <div>
+        <label for="prenom">Votre prénom :</label>
+        <input name="prenom" id="prenom" type="text" content="{{ prenom }}">
+        {% if message.vide %}<span>Votre prénom ne peux pas être vide</span>{% endif %}
+    <div>
+        <label for="mail">Votre courriel :</label>
+        <input name="mail" id="mail" type="email" content="{{ mail }}">
+        {% if message.vide %}{{ message.vide }}{% endif %}
+        {% if message.mail %}<span>Veuillez vous assurez que vous avez mis un courriel dans le champ</span>{% endif %}
+    </div>
+    <div>
+        <label for="motdepasse"> Veuillez entrer votre mot de passe : </label>
+        <input name="motdepasse" id="motdepasse" type="password">
+        {% if message.empthy %}<span> Les mot de passes ne peuvent pas être vides</span>{% endif %}
+    </div>
+    <div>
+        <label for="motdepasse2"> Veuillez confirmer votre mot de passe :</label>
+        <input name="motdepasse2" id="motdepasse2" type="password">
+        {% if message.mdp %}<span> Les deux mots de passes doivent être identique</span>{% endif %}
+
+    </div>
+
+    <input class="bouton-submit" type="submit" value="Créer le compte">
+    </form>
+    <div class="col-3 align-content-center">
+        <p> Déjà un compte ? <a href="/compte/authentifier">Se connecter</a></p>
+
+    </div>
+
+{% endblock %}
