@@ -1,41 +1,60 @@
 {% extends "base.jinja" %}
 {% block contenu %}
+<div class="flex justify-center mt-40">
+    <div class="flex flex-col">
+        <h2 class="text-lg">Inscrivez-vous</h2>
+        <div class="max-w-lg">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post" action="/compte/inscription"
+                novalidate>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Nom" name="nom" id="nom" type="text" content="{{ nom }}">
+                    {% if message.vide %}<span>Votre nom ne peux pas être vide</span>{% endif %}
 
-    <form class="formsAuthentification" method="post" action="/compte/inscription" novalidate>
-    <div>
-        <label for="nom">Votre nom :</label>
-        <input name="nom" id="nom" type="text" content="{{ nom }}">
-        {% if message.vide %}<span>Votre nom ne peux pas être vide</span>{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Prénom" name="prenom" id="prenom" type="text" content="{{ prenom }}">
+                    {% if message.vide %}<span>Votre prénom ne peux pas être vide</span>{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Courriel" name="mail" id="mail" type="email" content="{{ mail }}">
+                    {% if message.vide %}<span></span>{% endif %}
+                    {% if message.mail %}<span>Veuillez vous assurez que vous avez mis un courriel dans le
+                        champ</span>{% endif %}
+                    {% if message.mail_existe %}{{ message.mail_existe }}{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Mot de passe" name="motdepasse" id="motdepasse" type="password">
+                    {% if message.empthy %}<span> Les mot de passes ne peuvent pas être vides</span>{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Confirmation du mot de passe" name="motdepasse2" id="motdepasse2" type="password">
+                    {% if message.mdp %}<span> Les deux mots de passes doivent être identique</span>{% endif %}
+                </div>
+                <div class="flex items-center gap-3">
+                    <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit">
+                        Créer le compte
+                    </button>
+                    <p> Déjà un compte ? <a
+                            class="inline-block align-baseline font-bold text-blue-500 hover:text-blue-800"
+                            href="/compte/authentifier">Se connecter</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    </div>
-    <div>
-        <label for="prenom">Votre prénom :</label>
-        <input name="prenom" id="prenom" type="text" content="{{ prenom }}">
-        {% if message.vide %}<span>Votre prénom ne peux pas être vide</span>{% endif %}
-    <div>
-        <label for="mail">Votre courriel :</label>
-        <input name="mail" id="mail" type="email" content="{{ mail }}">
-        {% if message.vide %}{{ message.vide }}{% endif %}
-        {% if message.mail %}<span>Veuillez vous assurez que vous avez mis un courriel dans le champ</span>{% endif %}
-        {% if message.mail_existe %}<span>Un compte existe déjà avec ce courriel</span>{% endif %}
-    </div>
-    <div>
-        <label for="mdp"> Veuillez entrer votre mot de passe : </label>
-        <input name="mdp" id="mdp" type="password">
-        {% if message.empthy %}<span> Les mot de passes ne peuvent pas être vides</span>{% endif %}
-    </div>
-    <div>
-        <label for="mdp2"> Veuillez confirmer votre mot de passe :</label>
-        <input name="mdp2" id="mdp2" type="password">
-        {% if message.mdp %}<span> Les deux mots de passes doivent être identique</span>{% endif %}
 
-    </div>
-
-    <input class="bouton-submit" type="submit" value="Créer le compte">
-    </form>
-    <div class="col-3 align-content-center">
-        <p> Déjà un compte ? <a href="/compte/authentifier">Se connecter</a></p>
-
-    </div>
 
 {% endblock %}
