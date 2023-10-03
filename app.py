@@ -1,4 +1,3 @@
-from dotenv import dotenv_values
 from flask import Flask, render_template
 from flask_pymongo import PyMongo
 import os
@@ -16,8 +15,7 @@ mongo = PyMongo(app)
 @app.route("/")
 def index():
     """Afficher la page index"""
-
+    print(f"Connexion à la base de données: {mongo.db}")
     return render_template("index.jinja")
-
 
 
