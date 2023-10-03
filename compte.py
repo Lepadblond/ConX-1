@@ -3,6 +3,7 @@ from flask import redirect, render_template, request, Blueprint, session, abort
 import hashlib, logging
 import app
 
+
 bp_compte = Blueprint("compte", __name__)
 
 # Expression régulière pour valider les adresses e-mail
@@ -24,12 +25,16 @@ def connection():
         # Traite les données du formulaire de connexion lors de la requête POST
         mail = request.form.get("mail", default="")
         mdp = request.form.get("mdp", default="")
+        mdp = hacher_mot_de_passe(mdp)
+        print(mail)
+        user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
+        print(user)
+        # if user is not None:
+        #     id_user = str(user["_id"])
+        #     print(id_user)
+        #     creer_session(id_user)
 
-        user = app.mongo.db.users.find({"email": mail}, {"password": mdp})
-        if user is not None:
-            creer_session(user["_id"])
-
-        return render_template("/")
+        return redirect("/")
 
 
 # Fonction pour créer une session utilisateur
@@ -40,7 +45,6 @@ def creer_session(identifiant):
     else:
         session.permanent = True
         session["user"] = user
-    return redirect("/", code=303)  # Redirige vers la page d'accueil en cas de succès
 
 
 # Route pour la déconnexion
@@ -70,28 +74,31 @@ def inscription():
         message = {}
 
         # Validation des données du formulaire (à décommenter et à compléter)
-        # if not nom or not mail or not mdp or not mdp2 or not prenom:
-        #     message['vide'] = 'Veuillez remplir tous les champs'
-        # if mdp != mdp2:
-        #     message['mdp'] = 'Les mots de passe ne correspondent pas'
-        # if not re.match(regex_courriel, mail):
-        #     message['mail'] = 'Adresse mail invalide'
-
+        if not nom or not mail or not mdp or not mdp2 or not prenom:
+            message['vide'] = 'Veuillez remplir tous les champs'
+        if mdp != mdp2:
+            message['mdp'] = 'Les mots de passe ne correspondent pas'
+        if not re.match(regex_courriel, mail):
+            message['mail'] = 'Adresse mail invalide'
+        # Vérification de l'existence de l'adresse e-mail dans la base de données
+        if app.mongo.db.users.find_one({"email": mail}) is not None:
+            message['mail_existe'] = 'Cette adresse e-mail est déjà utilisée'
+        print(message)
         if message != {}:
             # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
             return render_template('compte/inscription.jinja', message=message)
         else:
             # Hash du mot de passe (à décommenter)
-            # mdp = hacher_mot_de_passe(mdp)
+            mdp = hacher_mot_de_passe(mdp)
 
             # Insertion de l'utilisateur dans la base de données
             app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
 
             # Récupération de l'ID de l'utilisateur nouvellement inscrit
-            # id_user = app.mongo.db.users.find_one({"email": mail})
-
+            user = app.mongo.db.users.find_one({"email": mail})
+            user_id = str(user["_id"])
             # Création d'une session pour l'utilisateur inscrit
-            # creer_session(id_user["_id"])
+            creer_session(user_id)
 
             # Redirige vers la page d'accueil après l'inscription
             return redirect('/', code=303)

@@ -17,15 +17,16 @@
         <input name="mail" id="mail" type="email" content="{{ mail }}">
         {% if message.vide %}{{ message.vide }}{% endif %}
         {% if message.mail %}<span>Veuillez vous assurez que vous avez mis un courriel dans le champ</span>{% endif %}
+        {% if message.mail_existe %}<span>Un compte existe déjà avec ce courriel</span>{% endif %}
     </div>
     <div>
-        <label for="motdepasse"> Veuillez entrer votre mot de passe : </label>
-        <input name="motdepasse" id="motdepasse" type="password">
+        <label for="mdp"> Veuillez entrer votre mot de passe : </label>
+        <input name="mdp" id="mdp" type="password">
         {% if message.empthy %}<span> Les mot de passes ne peuvent pas être vides</span>{% endif %}
     </div>
     <div>
-        <label for="motdepasse2"> Veuillez confirmer votre mot de passe :</label>
-        <input name="motdepasse2" id="motdepasse2" type="password">
+        <label for="mdp2"> Veuillez confirmer votre mot de passe :</label>
+        <input name="mdp2" id="mdp2" type="password">
         {% if message.mdp %}<span> Les deux mots de passes doivent être identique</span>{% endif %}
 
     </div>
