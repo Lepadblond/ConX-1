@@ -1,8 +1,7 @@
 import re
 from flask import redirect, render_template, request, Blueprint, session, abort
-import hashlib, logging
+import hashlib
 import app
-
 
 bp_compte = Blueprint("compte", __name__)
 
@@ -29,12 +28,12 @@ def connection():
         print(mail)
         user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
         print(user)
-        # if user is not None:
-        #     id_user = str(user["_id"])
-        #     print(id_user)
-        #     creer_session(id_user)
+        if user is not None:
+            id_user = str(user["_id"])
+            print(id_user)
+            creer_session(id_user)
 
-        return redirect("/")
+    return redirect("/")
 
 
 # Fonction pour créer une session utilisateur
@@ -66,7 +65,9 @@ def inscription():
     else:
         # Traite les données du formulaire d'inscription lors de la requête POST
         nom = request.form.get('nom')
+        print(nom)
         prenom = request.form.get('prenom')
+        print(prenom)
         mail = request.form.get('mail')
         mdp = request.form.get('mdp')
         mdp2 = request.form.get('mdp2')

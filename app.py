@@ -1,4 +1,4 @@
-from dotenv import dotenv_values
+
 from flask import Flask, render_template
 from flask_pymongo import PyMongo
 import os
