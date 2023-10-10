@@ -27,22 +27,20 @@ def connection():
         mdp = hacher_mot_de_passe(mdp)
         print(mail)
         user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
-        print(user)
         if user is not None:
-            id_user = str(user["_id"])
-            print(id_user)
-            creer_session(id_user)
+            creer_session(user)
 
     return redirect("/")
 
 
 # Fonction pour créer une session utilisateur
-def creer_session(identifiant):
-    user = app.mongo.db.users.find({"_id": identifiant})
+def creer_session(user):
+
     if not user:
         return redirect("/authentifier", code=303)  # Redirige vers la page de connexion en cas d'échec
     else:
         session.permanent = True
+        user["_id"] = str(user["_id"])
         session["user"] = user
 
 
@@ -93,13 +91,14 @@ def inscription():
             mdp = hacher_mot_de_passe(mdp)
 
             # Insertion de l'utilisateur dans la base de données
-            app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
+            resultat = app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
+            user = resultat.inserted_id()
 
             # Récupération de l'ID de l'utilisateur nouvellement inscrit
             # user = app.mongo.db.users.find_one({"email": mail})
             # user_id = str(user["_id"])
             # # Création d'une session pour l'utilisateur inscrit
-            # creer_session(user_id)
+            creer_session(user)
 
             # Redirige vers la page d'accueil après l'inscription
             return redirect('/', code=303)
