@@ -24,6 +24,9 @@ def connection():
         # Traite les données du formulaire de connexion lors de la requête POST
         mail = request.form.get("mail", default="")
         mdp = request.form.get("mdp", default="")
+        if not mail or not mdp:
+            return redirect("/compte/authentifier", code=303)
+
         mdp = hacher_mot_de_passe(mdp)
         print(mail)
         user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
@@ -94,9 +97,6 @@ def inscription():
             resultat = app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
             user = resultat.inserted_id()
 
-            # Récupération de l'ID de l'utilisateur nouvellement inscrit
-            # user = app.mongo.db.users.find_one({"email": mail})
-            # user_id = str(user["_id"])
             # # Création d'une session pour l'utilisateur inscrit
             creer_session(user)
 
