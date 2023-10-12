@@ -23,20 +23,21 @@
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Courriel" name="mail" id="mail" type="email" content="{{ mail }}">
-                    {% if message.vide %}{{ message.vide }}{% endif %}
+                    {% if message.vide %}<span></span>{% endif %}
                     {% if message.mail %}<span>Veuillez vous assurez que vous avez mis un courriel dans le
                         champ</span>{% endif %}
+                    {% if message.mail_existe %}{{ message.mail_existe }}{% endif %}
                 </div>
                 <div class="form-outline mb-4">
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Mot de passe" name="motdepasse" id="motdepasse" type="password">
+                        placeholder="Mot de passe" name="mdp" id="mdp" type="password">
                     {% if message.empthy %}<span> Les mot de passes ne peuvent pas être vides</span>{% endif %}
                 </div>
                 <div class="form-outline mb-4">
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Confirmation du mot de passe" name="motdepasse2" id="motdepasse2" type="password">
+                        placeholder="Confirmation du mot de passe" name="mdp2" id="mdp2" type="password">
                     {% if message.mdp %}<span> Les deux mots de passes doivent être identique</span>{% endif %}
                 </div>
                 <div class="flex items-center gap-3">
