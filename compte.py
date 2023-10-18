@@ -14,31 +14,8 @@ def hacher_mot_de_passe(mdp):
     return hashlib.sha512(mdp.encode()).hexdigest()
 
 
-# Route pour l'authentification
-@bp_compte.route("/authentifier", methods=["GET", "POST"])
-def connection():
-    if request.method == "GET":
-        # Affiche la page de formulaire de connexion lors de la requête GET
-        return render_template("compte/login.jinja")
-    else:
-        # Traite les données du formulaire de connexion lors de la requête POST
-        mail = request.form.get("mail", default="")
-        mdp = request.form.get("mdp", default="")
-        if not mail or not mdp:
-            return redirect("/compte/authentifier", code=303)
-
-        mdp = hacher_mot_de_passe(mdp)
-        print(mail)
-        user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
-        if user is not None:
-            creer_session(user)
-
-    return redirect("/")
-
-
 # Fonction pour créer une session utilisateur
 def creer_session(user):
-
     if not user:
         return redirect("/authentifier", code=303)  # Redirige vers la page de connexion en cas d'échec
     else:
@@ -77,14 +54,18 @@ def inscription():
 
         # Validation des données du formulaire (à décommenter et à compléter)
         if not nom or not mail or not mdp or not mdp2 or not prenom:
-            message['vide'] = 'Veuillez remplir tous les champs'
+            message['nom'] = True,
+            message['prenom'] = True,
+            message['mail'] = True,
+            message['mdp'] = True,
+            message['mdp2'] = True,
         if mdp != mdp2:
-            message['mdp'] = 'Les mots de passe ne correspondent pas'
+            message['mdpMatch'] = True
         if not re.match(regex_courriel, mail):
-            message['mail'] = 'Adresse mail invalide'
+            message['mail'] = True
         # Vérification de l'existence de l'adresse e-mail dans la base de données
         if app.mongo.db.users.find_one({"email": mail}) is not None:
-            message['mail_existe'] = 'Cette adresse e-mail est déjà utilisée'
+            message['mail_existe'] = True
         print(message)
         if message != {}:
             # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
@@ -94,8 +75,8 @@ def inscription():
             mdp = hacher_mot_de_passe(mdp)
 
             # Insertion de l'utilisateur dans la base de données
-            resultat = app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
-            user = resultat.inserted_id()
+            app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
+            user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
 
             # # Création d'une session pour l'utilisateur inscrit
             creer_session(user)

@@ -10,35 +10,36 @@
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Nom" name="nom" id="nom" type="text" content="{{ nom }}">
-                    {% if message.vide %}<span>Votre nom ne peux pas être vide</span>{% endif %}
+                    {% if message.vide %}<span>Le nom ne doit pas etre vide</span>{% endif %}
 
                 </div>
                 <div class="form-outline mb-4">
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Prénom" name="prenom" id="prenom" type="text" content="{{ prenom }}">
-                    {% if message.vide %}<span>Votre prénom ne peux pas être vide</span>{% endif %}
+                    {% if message.prenom %}<span>Le prénom ne doit pas etre vide</span>{% endif %}
                 </div>
                 <div class="form-outline mb-4">
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Courriel" name="mail" id="mail" type="email" content="{{ mail }}">
-                    {% if message.vide %}<span></span>{% endif %}
-                    {% if message.mail %}<span>Veuillez vous assurez que vous avez mis un courriel dans le
-                        champ</span>{% endif %}
-                    {% if message.mail_existe %}{{ message.mail_existe }}{% endif %}
+
+                    {% if message.mail %}<span>Le courriel ne doit pas etre vide</span>{% endif %}
+                    {% if message.mail_existe %}<span>Le courriel existe déja</span>{% endif %}
                 </div>
                 <div class="form-outline mb-4">
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Mot de passe" name="mdp" id="mdp" type="password">
-                    {% if message.empthy %}<span> Les mot de passes ne peuvent pas être vides</span>{% endif %}
+                    {% if message.mdp %}{<span>Le mot de passe ne doit pas etre vide</span>{% endif %}
                 </div>
                 <div class="form-outline mb-4">
                     <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Confirmation du mot de passe" name="mdp2" id="mdp2" type="password">
-                    {% if message.mdp %}<span> Les deux mots de passes doivent être identique</span>{% endif %}
+                    {% if message.mdp2 %}<span>Le mot de passe ne doit pas etre vide</span>{% endif %}
+                    {% if message.mdpMatch %}<span>Le mot de passe ne correspond pas</span>{% endif %}
+
                 </div>
                 <div class="flex items-center gap-3">
                     <button
