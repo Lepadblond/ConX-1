@@ -83,3 +83,13 @@ def inscription():
 
             # Redirige vers la page d'accueil après l'inscription
             return redirect('/', code=303)
+
+
+@bp_compte.route('/profil')
+def profil():
+    """Afficher la page de profil"""
+    if not session.get('user'):
+        abort(401)
+    else:
+
+        return render_template('compte/profile.jinja')
