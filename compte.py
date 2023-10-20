@@ -43,43 +43,39 @@ def inscription():
     else:
         # Traite les données du formulaire d'inscription lors de la requête POST
         nom = request.form.get('nom')
-        print(nom)
         prenom = request.form.get('prenom')
-        print(prenom)
         mail = request.form.get('mail')
         mdp = request.form.get('mdp')
         mdp2 = request.form.get('mdp2')
-
         message = {}
-
         # Validation des données du formulaire (à décommenter et à compléter)
-        if not nom or not mail or not mdp or not mdp2 or not prenom:
-            message['nom'] = True,
-            message['prenom'] = True,
-            message['mail'] = True,
-            message['mdp'] = True,
-            message['mdp2'] = True,
+        if not nom:
+            message['nom'] = True
+        if not prenom:
+            message['prenom'] = True
+        if not mail:
+            message['mail'] = True
+        if not mdp:
+            message['mdp'] = True
+        if not mdp2:
+            message['mdp2'] = True
         if mdp != mdp2:
             message['mdpMatch'] = True
         if not re.match(regex_courriel, mail):
             message['mail'] = True
         # Vérification de l'existence de l'adresse e-mail dans la base de données
-        if app.mongo.db.users.find_one({"email": mail}) is not None:
+        if app.mongo.db.users.find_one({"email": mail}):
             message['mail_existe'] = True
-        print(message)
         if message != {}:
             # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
-            return render_template('compte/inscription.jinja', message=message)
+            return render_template('compte/inscription.jinja', message=message, nom=nom, prenom=prenom, mail=mail)
         else:
             # Hash du mot de passe (à décommenter)
             mdp = hacher_mot_de_passe(mdp)
-
             # Insertion de l'utilisateur dans la base de données
             app.mongo.db.users.insert_one({"nom": nom, "prenom": prenom, "email": mail, "password": mdp})
             user = app.mongo.db.users.find_one({"email": mail}, {"password": mdp})
-
             # # Création d'une session pour l'utilisateur inscrit
             creer_session(user)
-
             # Redirige vers la page d'accueil après l'inscription
             return redirect('/', code=303)
