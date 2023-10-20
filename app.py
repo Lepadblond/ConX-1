@@ -13,7 +13,7 @@ app.secret_key = "e21f73185e51e634aa9ef799c70878d366a55b7fd626981f271b66b10ac65c
 mongo = PyMongo(app)
 
 
-@app.route("/",methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     """Afficher la page index"""
     message = {}
@@ -29,7 +29,7 @@ def index():
         print(mdp)
 
         if not mail or not mdp:
-            #rajouter message erreur
+            # rajouter message erreur
             message['mail'] = True,
             message['mdp'] = True,
             return render_template("index.jinja", message=message)
@@ -39,8 +39,8 @@ def index():
         user = mongo.db.users.find_one({"email": mail}, {"password": mdp})
         if user is not None:
             creer_session(user)
-
-    return redirect("/")
+    user["_id"] = str(user["_id"])
+    return redirect("/compte/profil/" + user["_id"], code=303)
 
 
 def hacher_mot_de_passe(mdp):
