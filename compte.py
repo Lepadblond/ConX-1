@@ -82,7 +82,7 @@ def inscription():
             creer_session(user)
 
             # Redirige vers la page d'profil après l'inscription
-            return redirect('/compte/profil/'+ user["_id"], code=303)
+            return redirect('/compte/profil/' + user["_id"], code=303)
 
 
 @bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET', 'POST'])
@@ -93,8 +93,7 @@ def profil(id_utilisateur):
     user = session['user']
     if id_utilisateur != user['_id']:
         abort(403)
-
     if request.method == 'GET':
-        return render_template('/compte/profile.jinja', message={})
-
-
+        user = app.mongo.db.users.find_one({"_id": user['_id']})
+        print(user)
+        return render_template('/compte/profile.jinja', message={}, user=user)

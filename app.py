@@ -25,8 +25,7 @@ def index():
         # Traite les données du formulaire de connexion lors de la requête POST
         mail = request.form.get("mail", default="")
         mdp = request.form.get("mdp", default="")
-        print(mail)
-        print(mdp)
+
 
         if not mail or not mdp:
             # rajouter message erreur
@@ -35,7 +34,7 @@ def index():
             return render_template("index.jinja", message=message)
 
         mdp = hacher_mot_de_passe(mdp)
-        print(mail)
+
         user = mongo.db.users.find_one({"email": mail}, {"password": mdp})
         if user is not None:
             creer_session(user)
