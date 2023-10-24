@@ -81,11 +81,11 @@ def inscription():
             # # Création d'une session pour l'utilisateur inscrit
             creer_session(user)
 
-            # Redirige vers la page d'accueil après l'inscription
-            return redirect('/', code=303)
+            # Redirige vers la page d'profil après l'inscription
+            return redirect('/compte/profil/'+ user["_id"], code=303)
 
 
-@bp_compte.route('/profil/<int:id_utilisateur>', methods=['GET', 'POST'])
+@bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET', 'POST'])
 def profil(id_utilisateur):
     """Afficher la page de profil"""
     if not session.get('user'):
@@ -95,6 +95,6 @@ def profil(id_utilisateur):
         abort(403)
 
     if request.method == 'GET':
-        return render_template('compte/profil.jinja', message={})
+        return render_template('/compte/profile.jinja', message={})
 
 
