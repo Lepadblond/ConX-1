@@ -26,7 +26,6 @@ def index():
         mail = request.form.get("mail", default="")
         mdp = request.form.get("mdp", default="")
 
-
         if not mail or not mdp:
             # rajouter message erreur
             message['mail'] = True,
@@ -52,4 +51,5 @@ def creer_session(user):
     else:
         session.permanent = True
         user["_id"] = str(user["_id"])
+        print(user)
         session["user"] = user

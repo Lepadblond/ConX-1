@@ -1,4 +1,6 @@
 import re
+
+from bson import ObjectId
 from flask import redirect, render_template, request, Blueprint, session, abort
 import hashlib
 import app
@@ -20,7 +22,6 @@ def creer_session(user):
         return redirect("/authentifier", code=303)  # Redirige vers la page de connexion en cas d'échec
     else:
         session.permanent = True
-        user["_id"] = str(user["_id"])
         session["user"] = user
 
 
@@ -88,12 +89,21 @@ def inscription():
 @bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET', 'POST'])
 def profil(id_utilisateur):
     """Afficher la page de profil"""
+    print(id_utilisateur)
     if not session.get('user'):
         abort(401)
     user = session['user']
+
     if id_utilisateur != user['_id']:
         abort(403)
     if request.method == 'GET':
-        user = app.mongo.db.users.find_one({"_id": user['_id']})
+        # Affiche la page de formulaire de profil lors de la requête GET
+        print(user)
+
+        object_id = ObjectId(id_utilisateur)
+        user = app.mongo.db.users.find_one({"_id": object_id})
         print(user)
         return render_template('/compte/profile.jinja', message={}, user=user)
+
+
+
