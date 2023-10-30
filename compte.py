@@ -86,7 +86,7 @@ def inscription():
             return redirect('/compte/profil/' + user["_id"], code=303)
 
 
-@bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET', 'POST'])
+@bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET'])
 def profil(id_utilisateur):
     """Afficher la page de profil"""
     print(id_utilisateur)
@@ -96,14 +96,57 @@ def profil(id_utilisateur):
 
     if id_utilisateur != user['_id']:
         abort(403)
-    if request.method == 'GET':
-        # Affiche la page de formulaire de profil lors de la requête GET
-        print(user)
 
+    object_id = ObjectId(id_utilisateur)
+    user = app.mongo.db.users.find_one({"_id": object_id})
+
+    return render_template('/compte/profile.jinja', message={}, user=user)
+
+
+@bp_compte.route('/profil/modifier/<string:id_utilisateur>', methods=['GET', 'POST'])
+def modifiercompte(id_utilisateur):
+    """Modifier le profil"""
+    if not session.get('user'):
+        abort(401)
+    user = session['user']
+
+    if id_utilisateur != user['_id']:
+        abort(403)
+
+    if request.method == 'GET':
         object_id = ObjectId(id_utilisateur)
         user = app.mongo.db.users.find_one({"_id": object_id})
-        print(user)
-        return render_template('/compte/profile.jinja', message={}, user=user)
+        return render_template('/compte/modifier.jinja', message={}, user=user)
+    else:
+        nom = request.form.get('nom')
+        prenom = request.form.get('prenom')
+        mail = request.form.get('mail')
+        ville = request.form.get('ville')
+        pays = request.form.get('pays')
+        emploi = request.form.get('emploi')
+        description = request.form.get('description')
 
+        message = {}
+        # Validation des données du formulaire
+        if not nom or not mail or not prenom or not ville or not pays:
+            message['nom'] = True,
+            message['prenom'] = True,
+            message['mail'] = True,
+            message['ville'] = True,
+            message['pays'] = True,
 
+        if len(nom) and len(prenom) < 1:
+            message['nomOuPrenomTropCourt'] = True
 
+        if message != {}:
+            # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
+            return render_template('/compte/modifier.jinja', message=message)
+        else:
+            # Insertion de l'utilisateur dans la base de données
+            object_id = ObjectId(id_utilisateur)
+            app.mongo.db.users.update_one({"_id": object_id}, {
+                "$set": {"nom": nom, "prenom": prenom, "email": mail, "ville": ville, "pays": pays, "emploi": emploi,
+                         "description": description}})
+            user = app.mongo.db.users.find_one({"_id": object_id})
+            # Redirige vers la page de profil après la modification
+            return redirect('/compte/profil/' + user["_id"], code=303)
