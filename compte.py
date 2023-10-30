@@ -86,10 +86,11 @@ def inscription():
             return redirect('/compte/profil/' + user["_id"], code=303)
 
 
+# ...
+
 @bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET'])
 def profil(id_utilisateur):
     """Afficher la page de profil"""
-    print(id_utilisateur)
     if not session.get('user'):
         abort(401)
     user = session['user']
@@ -100,7 +101,7 @@ def profil(id_utilisateur):
     object_id = ObjectId(id_utilisateur)
     user = app.mongo.db.users.find_one({"_id": object_id})
 
-    return render_template('/compte/profile.jinja', message={}, user=user)
+    return render_template('compte/profile.jinja', message={}, user=user)
 
 
 @bp_compte.route('/profil/modifier/<string:id_utilisateur>', methods=['GET', 'POST'])
@@ -116,7 +117,7 @@ def modifiercompte(id_utilisateur):
     if request.method == 'GET':
         object_id = ObjectId(id_utilisateur)
         user = app.mongo.db.users.find_one({"_id": object_id})
-        return render_template('/compte/modifier.jinja', message={}, user=user)
+        return render_template('compte/modifier.jinja', message={}, user=user)
     else:
         nom = request.form.get('nom')
         prenom = request.form.get('prenom')
@@ -140,7 +141,7 @@ def modifiercompte(id_utilisateur):
 
         if message != {}:
             # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
-            return render_template('/compte/modifier.jinja', message=message)
+            return render_template('compte/modifier.jinja', message=message)
         else:
             # Insertion de l'utilisateur dans la base de données
             object_id = ObjectId(id_utilisateur)

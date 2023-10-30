@@ -55,20 +55,24 @@
                             {{ user.ville }} , {{ user.pays }}
                         </div>
                         <div class="mb-2 text-blueGray-600 mt-10">
-                            <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>{{ user.emploi}}
+                            <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>{{ user.emploi }}
                         </div>
                         {% for etude in user.etude %}
-                        <div class="mb-2 text-blueGray-600">
-                            <i class="fas fa-university mr-2 text-lg text-blueGray-400"></i>{{ etude }}
-                        </div>
-                         {% endfor %}
+                            <div class="mb-2 text-blueGray-600">
+                                <i class="fas fa-university mr-2 text-lg text-blueGray-400"></i>{{ etude }}
+                            </div>
+                        {% endfor %}
                     </div>
                     <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
                         <div class="flex flex-wrap justify-center">
                             <div class="w-full lg:w-9/12 px-4">
+
+                                <label>
                                 <textarea class="mb-4 text-lg leading-relaxed text-blueGray-700">
-                                    {{user.description}}
+                                                {{ user.description }}
                                 </textarea>
+                                </label>
+
                             </div>
                         </div>
                     </div>
