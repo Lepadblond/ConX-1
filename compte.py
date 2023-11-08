@@ -86,7 +86,7 @@ def inscription():
             return redirect('/compte/profil/' + user["_id"], code=303)
 
 
-# ...
+
 
 @bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET'])
 def profil(id_utilisateur):
@@ -107,17 +107,13 @@ def profil(id_utilisateur):
 @bp_compte.route('/profil/modifier/<string:id_utilisateur>', methods=['GET', 'POST'])
 def modifiercompte(id_utilisateur):
     """Modifier le profil"""
-    if not session.get('user'):
-        abort(401)
-    user = session['user']
-
-    if id_utilisateur != user['_id']:
-        abort(403)
 
     if request.method == 'GET':
+
         object_id = ObjectId(id_utilisateur)
+        print(object_id)
         user = app.mongo.db.users.find_one({"_id": object_id})
-        return render_template('compte/modifier.jinja', message={}, user=user)
+        return render_template("compte/modifier.jinja", message={}, user=user)
     else:
         nom = request.form.get('nom')
         prenom = request.form.get('prenom')
