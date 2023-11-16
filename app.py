@@ -37,7 +37,7 @@ def index():
         user = mongo.db.users.find_one({"email": mail}, {"password": mdp})
         if user is not None:
             creer_session(user)
-    user["_id"] = str(user["_id"])
+            user["_id"] = str(user["_id"])
     return redirect("/compte/profil/" + user["_id"], code=303)
 
 

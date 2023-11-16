@@ -23,6 +23,7 @@ def creer_session(user):
     else:
         session.permanent = True
         session["user"] = user
+        user["_id"] = str(user["_id"])
 
 
 # Route pour la déconnexion
@@ -81,11 +82,11 @@ def inscription():
 
             # # Création d'une session pour l'utilisateur inscrit
             creer_session(user)
+            object_id = str(user["_id"])
+            print(object_id)
 
             # Redirige vers la page d'profil après l'inscription
-            return redirect('/compte/profil/' + user["_id"], code=303)
-
-
+            return redirect('/compte/profil/' + object_id, code=303)
 
 
 @bp_compte.route('/profil/<string:id_utilisateur>', methods=['GET'])
@@ -107,12 +108,18 @@ def profil(id_utilisateur):
 @bp_compte.route('/profil/modifier/<string:id_utilisateur>', methods=['GET', 'POST'])
 def modifiercompte(id_utilisateur):
     """Modifier le profil"""
+    if not session.get('user'):
+        abort(401)
+    user = session['user']
+
+    if id_utilisateur != user['_id']:
+        abort(403)
 
     if request.method == 'GET':
-
         object_id = ObjectId(id_utilisateur)
         print(object_id)
         user = app.mongo.db.users.find_one({"_id": object_id})
+        print(user)
         return render_template("compte/modifier.jinja", message={}, user=user)
     else:
         nom = request.form.get('nom')
@@ -145,5 +152,6 @@ def modifiercompte(id_utilisateur):
                 "$set": {"nom": nom, "prenom": prenom, "email": mail, "ville": ville, "pays": pays, "emploi": emploi,
                          "description": description}})
             user = app.mongo.db.users.find_one({"_id": object_id})
+            print(user)
             # Redirige vers la page de profil après la modification
-            return redirect('/compte/profil/' + user["_id"], code=303)
+            return redirect('/compte/profil/' + id_utilisateur, code=303)
