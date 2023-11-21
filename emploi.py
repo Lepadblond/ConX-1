@@ -77,6 +77,7 @@ def ajouteremploi():
                 message['entrepriseSiteWeb'] = True,
                 message['lieu'] = True,
                 message['salaire'] = True,
+                
 
                 return render_template("emploi/ajouteremploi.jinja", message=message)
             else:
