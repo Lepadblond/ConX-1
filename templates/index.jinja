@@ -12,17 +12,13 @@
                               novalidate>
                             <div class="form-outline mb-4">
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                       type="email" id="mail" name="mail" placeholder="Adresse courriel" class="form-control"/>
-                                  {%  if message.mail%}<span>Le courriel ne doit pas etre vide</span> {% endif %}
+                                       type="email" id="mail" name="mail" placeholder="Adresse courriel" class="form-control" value="{{ mail }}"/>
+                                  {%  if message.mail%}<span class="text-red-700">Le courriel ne doit pas etre vide</span> {% endif %}
                             </div>
-
-
-
-
                             <div class="form-outline mb-4">
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                       type="password" id="mdp" name="mdp"  placeholder="Mot de passe" class="form-control"/>
-                                {%  if message.mdp%}<span>Le mot de passe ne doit pas etre vide</span> {% endif %}
+                                       type="password" id="mdp" name="mdp" placeholder="Mot de passe" class="form-control"/>
+                                {%  if message.mdp%}<span class="text-red-700">Le mot de passe ne doit pas etre vide</span>{% endif %}
                             </div>
                             <div class="flex items-center gap-3">
                                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
