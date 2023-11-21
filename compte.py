@@ -124,10 +124,11 @@ def modifiercompte(id_utilisateur):
     else:
         nom = request.form.get('nom')
         prenom = request.form.get('prenom')
-        #mail = request.form.get('mail')
+        # mail = request.form.get('mail')
         ville = request.form.get('ville')
         pays = request.form.get('pays')
         emploi = request.form.get('emploi')
+        etude = request.form.get('etude')
         description = request.form.get('description')
 
         message = {}
@@ -146,7 +147,7 @@ def modifiercompte(id_utilisateur):
             # Insertion de l'utilisateur dans la base de données
             object_id = ObjectId(id_utilisateur)
             app.mongo.db.users.update_one({"_id": object_id}, {
-                "$set": {"nom": nom, "prenom": prenom, "ville": ville, "pays": pays, "emploi": emploi,
+                "$set": {"nom": nom, "prenom": prenom, "ville": ville, "etude": etude, "pays": pays, "emploi": emploi,
                          "description": description}})
             user = app.mongo.db.users.find_one({"_id": object_id})
             print(user)
