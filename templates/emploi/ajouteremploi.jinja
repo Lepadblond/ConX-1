@@ -1,0 +1,63 @@
+{% extends "base.jinja" %}
+
+    {% block contenu %}
+<div class="flex justify-center mt-40">
+    <div class="flex flex-col">
+        <h2 class="text-lg">Inscrivez-vous</h2>
+        <div class="max-w-lg">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post" action="/compte/inscription"
+                novalidate>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="titre" name="titre" id="titre" type="text" content="{{ nom }}">
+                    {% if message.titre %}<span>Le titre ne doit pas etre vide</span>{% endif %}
+
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Prénom" name="prenom" id="prenom" type="text" content="{{ prenom }}">
+                    {% if message.prenom %}<span>Le prénom ne doit pas etre vide</span>{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Courriel" name="mail" id="mail" type="email" content="{{ mail }}">
+
+                    {% if message.mail %}<span>Le courriel ne doit pas etre vide</span>{% endif %}
+                    {% if message.mail_existe %}<span>Le courriel existe déja</span>{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Mot de passe" name="mdp" id="mdp" type="password">
+                    {% if message.mdp %}{<span>Le mot de passe ne doit pas etre vide</span>{% endif %}
+                </div>
+                <div class="form-outline mb-4">
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Confirmation du mot de passe" name="mdp2" id="mdp2" type="password">
+                    {% if message.mdp2 %}<span>Le mot de passe ne doit pas etre vide</span>{% endif %}
+                    {% if message.mdpMatch %}<span>Le mot de passe ne correspond pas</span>{% endif %}
+
+                </div>
+                <div class="flex items-center gap-3">
+                    <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit"></button>
+                        Créer le compte
+
+                    <p> Déjà un compte ? <a
+                            class="inline-block align-baseline font-bold text-blue-500 hover:text-blue-800"
+                            href="/">Se connecter</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+    {% endblock %}
