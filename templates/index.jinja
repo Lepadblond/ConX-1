@@ -1,31 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://www.cegepgarneau.ca/favicon.ico"/>
-    <link rel="stylesheet" href="/static/css/styles.css"/>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>ConX</title>
-    {% block script %}
-    {% endblock %}
-</head>
-<body class="min-h-screen">
-<nav class="flex items-center place-content-between container mx-auto px-10 mt-4">
-    <div class="">
-        <h1 class="flex items-center logo"><a href="/">ConX</a></h1>
-    </div>
-    <div class="flex gap-3">
-        {% if not session.user %}
-
-            <a href="/compte/inscription">Créer un compte</a>
-        {% else %}
-            <a href="/compte/deconnecter">Se Déconnecter</a>
-        {% endif %}
-    </div>
-</nav>
-<main>
+{% extends "base.jinja" %}
     {% block contenu %}
         {% if not session.user %}
         <div class="flex container mx-auto items-center justify-evenly mt-16">
@@ -94,12 +67,9 @@
 
     {% else %}
 
+            <h2>allo</h2>
+
+
 
     {% endif %}
     {% endblock %}
-</main>
-<footer class="container mx-auto px-4 sticky top-[100vh] flex justify-center mb-4"> Frédéric Dignard et David Girard
-    @Copyright 2023
-</footer>
-</body>
-</html>

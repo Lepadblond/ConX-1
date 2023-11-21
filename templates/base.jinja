@@ -25,6 +25,7 @@
                 <a href="/">Se Connecter</a>
                 <a href="/compte/inscription">Créer un compte</a>
             {% else %}
+                <a href="/compte/profil/{{ session.user._id }}">Mon Compte</a>
                 <a href="/compte/deconnecter">Se Déconnecter</a>
             {% endif %}
         </div>

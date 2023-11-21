@@ -117,14 +117,14 @@ def modifiercompte(id_utilisateur):
 
     if request.method == 'GET':
         object_id = ObjectId(id_utilisateur)
-        print(object_id)
+
         user = app.mongo.db.users.find_one({"_id": object_id})
-        print(user)
+
         return render_template("compte/modifier.jinja", message={}, user=user)
     else:
         nom = request.form.get('nom')
         prenom = request.form.get('prenom')
-        mail = request.form.get('mail')
+        #mail = request.form.get('mail')
         ville = request.form.get('ville')
         pays = request.form.get('pays')
         emploi = request.form.get('emploi')
@@ -132,24 +132,21 @@ def modifiercompte(id_utilisateur):
 
         message = {}
         # Validation des données du formulaire
-        if not nom or not mail or not prenom or not ville or not pays:
+        if not nom or not prenom:
             message['nom'] = True,
             message['prenom'] = True,
-            message['mail'] = True,
-            message['ville'] = True,
-            message['pays'] = True,
 
         if len(nom) and len(prenom) < 1:
             message['nomOuPrenomTropCourt'] = True
 
         if message != {}:
             # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
-            return render_template('compte/modifier.jinja', message=message)
+            return render_template('compte/modifier.jinja', message=message, user=user)
         else:
             # Insertion de l'utilisateur dans la base de données
             object_id = ObjectId(id_utilisateur)
             app.mongo.db.users.update_one({"_id": object_id}, {
-                "$set": {"nom": nom, "prenom": prenom, "email": mail, "ville": ville, "pays": pays, "emploi": emploi,
+                "$set": {"nom": nom, "prenom": prenom, "ville": ville, "pays": pays, "emploi": emploi,
                          "description": description}})
             user = app.mongo.db.users.find_one({"_id": object_id})
             print(user)
