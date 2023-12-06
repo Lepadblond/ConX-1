@@ -54,14 +54,13 @@ def ajouteremploi():
             # je retourne la page du formulaire d'ajout d'emploi
             return render_template("emploi/ajouteremploi.jinja", message={})
         else:
-            entreprise = {"nom": "", "adresse": "", "siteWeb": ""}
+            entreprise = {"nom": "", "siteWeb": ""}
 
             # je recupere les données du formulaire
             titre = request.form.get("titre", default="")
             description = request.form.get("description", default="")
-            entreprise.nom = request.form.get("entrepriseNom", default="")
-            entreprise.adresse = request.form.get("entrepriseAdresse", default="")
-            entreprise.siteWeb = request.form.get("entrepriseSiteWeb", default="")
+            entreprise["nom"] = request.form.get("entrepriseNom", default="")
+            entreprise["siteWeb"] = request.form.get("entrepriseSiteWeb", default="")
             lieu = request.form.get("lieu", default="")
             salaire = request.form.get("salaire", type=int, default=0)
             user = session.get("user")
@@ -69,15 +68,14 @@ def ajouteremploi():
             print(id_user)
             message = {}
             # je verifie si les champs sont vides
-            if not titre or not description or not entreprise.nom or not entreprise.adresse or not entreprise.siteWeb or not lieu or not salaire:
+            if not titre or not description or not entreprise["nom"] or not entreprise["siteWeb"] or not lieu or not salaire:
                 message['titre'] = True,
                 message['description'] = True,
                 message['entrepriseNom'] = True,
-                message['entrepriseAdresse'] = True,
                 message['entrepriseSiteWeb'] = True,
                 message['lieu'] = True,
-                message['salaire'] = True,
-                
+                message['salaire'] = True
+                print("allo")
 
                 return render_template("emploi/ajouteremploi.jinja", message=message)
             else:

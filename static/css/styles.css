@@ -19,6 +19,11 @@ padding: 0 5px 0 5px;;
 .delete{
 background-image: url("/static/images/delete.svg");
 }
+.card {
+    width: 300px; /* Adjust as needed */
+    height: 250px; /* Adjust as needed */
+    object-fit: cover;
+}
 
 
 
