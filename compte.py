@@ -101,8 +101,15 @@ def profil(id_utilisateur):
 
     object_id = ObjectId(id_utilisateur)
     user = app.mongo.db.users.find_one({"_id": object_id})
+    message = {}
 
-    return render_template('compte/profile.jinja', message={}, user=user)
+    # Retrieve the jobs added by the user
+    listeemplois = list(app.mongo.db.emplois.find({"userId": id_utilisateur}))
+
+    if not listeemplois:
+        message["listeemplois"] = True
+
+    return render_template('compte/profile.jinja', message=message, user=user, listeemplois=listeemplois)
 
 
 @bp_compte.route('/profil/modifier/<string:id_utilisateur>', methods=['GET', 'POST'])
