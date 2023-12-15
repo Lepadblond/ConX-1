@@ -40,8 +40,9 @@ def deconnection():
 def inscription():
     """Inscription d'un utilisateur"""
     if request.method == 'GET':
+        valeurChamp = {}
         # Affiche la page de formulaire d'inscription lors de la requête GET
-        return render_template('compte/inscription.jinja', message={})
+        return render_template('compte/inscription.jinja', message={}, valeurChamp=valeurChamp)
     else:
         # Traite les données du formulaire d'inscription lors de la requête POST
         nom = request.form.get('nom')
@@ -52,15 +53,39 @@ def inscription():
         mdp = request.form.get('mdp')
         mdp2 = request.form.get('mdp2')
 
-        message = {}
+        message = {
+            'nom': False,
+            'prenom': False,
+            'mail': False,
+            'mdp': False,
+            'mdp2': False,
+            'mdpMatch': False,
+            'mail_existe': False
+        }
+        valeurChamp = {"nom": "", "prenom": "", "mail": ""}
+        print(valeurChamp)
 
         # Validation des données du formulaire (à décommenter et à compléter)
-        if not nom or not mail or not mdp or not mdp2 or not prenom:
-            message['nom'] = True,
-            message['prenom'] = True,
-            message['mail'] = True,
-            message['mdp'] = True,
-            message['mdp2'] = True,
+        if not nom:
+            message['nom'] = True
+        else:
+            valeurChamp['nom'] = nom
+
+        if not prenom:
+            message['prenom'] = True
+        else:
+            valeurChamp['prenom'] = prenom
+
+        if not mail:
+            message['mail'] = True
+        else:
+            valeurChamp['mail'] = mail
+
+        if not mdp:
+            message['mdp'] = True
+        if not mdp2:
+            message['mdp2'] = True
+
         if mdp != mdp2:
             message['mdpMatch'] = True
         if not re.match(regex_courriel, mail):
@@ -69,9 +94,8 @@ def inscription():
         if app.mongo.db.users.find_one({"email": mail}) is not None:
             message['mail_existe'] = True
         print(message)
-        if message != {}:
-            # Si des erreurs sont présentes, affiche le formulaire avec les messages d'erreur
-            return render_template('compte/inscription.jinja', message=message)
+        if any(message.values()):
+            return render_template('compte/inscription.jinja', message=message, valeurChamp=valeurChamp)
         else:
             # Hash du mot de passe (à décommenter)
             mdp = hacher_mot_de_passe(mdp)

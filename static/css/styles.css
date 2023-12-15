@@ -26,6 +26,12 @@ background-image: url("/static/images/delete.svg");
 }
 
 
+#formModifier {
+    border: 1px solid #000;
+    padding: 20px;
+    border-radius: 5px;
+}
+
 
 
 
